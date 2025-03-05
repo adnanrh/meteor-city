@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Rails 7!
-gem 'rails', '~> 7.1'
+gem 'rails', '~> 8.0'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
