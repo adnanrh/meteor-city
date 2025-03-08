@@ -1,0 +1,7 @@
+<h1 class="text-2xl font-bold">Your Profile</h1>
+<%= profile_picture_for(current_user) %>
+<p>Name: <%= current_user.username %></p>
+<p>Display Name: <%= current_user.display_name %></p>
+<p>Bio: <%= current_user.bio %></p>
+
+<%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary" %>

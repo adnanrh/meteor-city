@@ -1,0 +1,7 @@
+<h1 class="text-2xl font-bold">Profile Preview</h1>
+<%= profile_picture_for(@user) %>
+<p>Username: <%= @user.username %></p>
+<p>Display Name: <%= @user.display_name %></p>
+<p>Bio: <%= @user.bio %></p>
+
+<%= button_to "Send Friend Request", friendship_requests_path(requested_id: @user.id), method: :post, class: "btn btn-primary" %>

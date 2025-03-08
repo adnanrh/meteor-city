@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold">Create a New Post</h1>
+
+<%= form_with(model: @post, url: posts_path, method: :post, multipart: true) do |form| %>
+  <!-- Post Type Selector -->
+  <div class="mb-4">
+    <%= form.label :post_type, "Post Type" %>
+    <div class="flex space-x-4">
+      <%= form.radio_button :post_type, "text", id: "post_text", checked: true, class: "post-type-option" %>
+      <%= form.label :post_type, "Text", for: "post_text" %>
+
+      <%= form.radio_button :post_type, "image", id: "post_image", class: "post-type-option" %>
+      <%= form.label :post_type, "Image", for: "post_image" %>
+    </div>
+  </div>
+
+  <div id="text-content-field">
+    <%= form.label :content %>
+    <%= form.text_area :content, class: "w-full border rounded p-2" %>
+  </div>
+
+  <div id="image-upload-field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+
+  <!-- Caption Field (Only for Image Posts) -->
+  <div id="caption-field">
+    <%= form.label :caption, "Caption" %>
+    <%= form.text_field :caption, class: "w-full border rounded p-2" %>
+  </div>
+
+  <%= form.submit "Publish", class: form_button_classes %>
+<% end %>

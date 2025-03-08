@@ -1,0 +1,12 @@
+<h1 class="text-2xl font-bold">Your Friends</h1>
+<% if @friends.any? %>
+  <ul>
+    <% @friends.each do |friend| %>
+      <%= profile_picture_for(friend) %>
+      <li><%= link_to friend.username, friend_path(friend) %></li>
+      <li><%= friend.display_name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You haven't connected with anyone yet.</p>
+<% end %>

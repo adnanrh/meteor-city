@@ -1,0 +1,9 @@
+<h1 class="text-2xl font-bold">Invitation</h1>
+# TODO: show user profile picture and/or display name
+<p>You have been invited to connect with <strong><%= @invite.inviter.username %></strong>.</p>
+
+<%= form_with url: friendships_path, method: :post do |form| %>
+  <%= hidden_field_tag :invite_token, @invite.token %>
+
+  <%= form.submit "Accept Invitation", class: "btn btn-primary" %>
+<% end %>

@@ -1,0 +1,14 @@
+<%= profile_picture_for(@friend) %>
+<h1 class="text-2xl font-bold"><%= @friend.username %>'s Profile</h1>
+<h2 class="text-2xl font-bold"><%= @friend.display_name %>'s Profile</h2>
+<p>Bio: <%= @friend.bio %></p>
+
+# Posts
+# TODO: pagination
+<% if @friend.posts.any? %>
+  <% @friend.posts.each do |post| %>
+    <%= render "posts/post", post: post %>
+  <% end %>
+<% else %>
+  <p>No posts to show yet.</p>
+<% end %>

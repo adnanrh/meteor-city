@@ -1,0 +1,14 @@
+<h1 class="text-2xl font-bold">Friend Requests</h1>
+<% if @requests.any? %>
+  <% @requests.each do |request| %>
+    <div class="request p-2 border-b">
+      <%= profile_picture_for(request.requester) %>
+      <p><%= request.requester.username %> wants to connect!</p>
+      <p><%= request.requester.display_name %></p>
+      <%= button_to "Accept", accept_friendship_request_path(request), method: :post, class: "btn btn-success" %>
+      <%= button_to "Decline", decline_friendship_request_path(request), method: :post, class: "btn btn-danger" %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No pending requests.</p>
+<% end %>

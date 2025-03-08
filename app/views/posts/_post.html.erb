@@ -1,0 +1,19 @@
+<div class="border rounded-lg p-4 shadow-sm bg-white mb-4">
+  <!-- Post Header: Author & Timestamp -->
+  <div class="flex justify-between items-center text-gray-500 text-sm">
+    <span><strong>@<%= post.user.username %></strong></span>
+    <span><%= post.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+  </div>
+
+  <!-- Post Content -->
+  <div class="mt-2">
+    <% if post.post_type == "text" %>
+      <p><%= post.content %></p>
+    <% elsif post.post_type == "image" %>
+      <%= post_image_for(post) %>
+      <% if post.caption.present? %>
+        <p class="text-gray-700 mt-1"><%= post.caption %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<h1 class="text-2xl font-bold">Edit Profile</h1>
+<%= form_with(model: current_user, url: profile_path, method: :patch, multipart: true) do |form| %>
+  <div>
+    <%= form.label :profile_picture %>
+    <%= form.file_field :profile_picture, class: "form-input" %>
+  </div>
+
+  <div>
+    <%= form.label :display_name %>
+    <%= form.text_field :display_name, class: "form-input" %>
+  </div>
+
+  <div>
+    <%= form.label :username %>
+    <%= form.text_field :username, class: "form-input" %>
+  </div>
+
+  <div>
+    <%= form.label :bio %>
+    <%= form.text_area :bio, class: "form-input" %>
+  </div>
+
+  <%= form.submit "Save Changes", class: form_button_classes %>
+<% end %>
