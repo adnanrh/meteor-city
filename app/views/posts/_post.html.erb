@@ -1,7 +1,18 @@
 <div class="border rounded-lg p-4 shadow-sm bg-white mb-4">
-  <!-- Post Header: Author & Timestamp -->
-  <div class="flex justify-between items-center text-gray-500 text-sm">
-    <span><strong>@<%= post.user.username %></strong></span>
+  <!-- Post Header: Profile Picture, Author & Timestamp -->
+  <div class="flex items-center justify-between text-black-500 text-md">
+    <div class="flex items-center space-x-3">
+      <!-- Link to own profile instead of friends path for user's own posts -->
+      <% user_path = adjusted_user_path(post.user) %>
+
+      <!-- Profile Picture -->
+      <%= linked_post_profile_picture_for(post.user) %>
+
+      <!-- Username -->
+      <%= link_to "@#{post.user.username}", user_path, class: "font-semibold text-blue-600 hover:underline" %>
+    </div>
+
+    <!-- Timestamp -->
     <span><%= post.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
   </div>
 
@@ -16,4 +27,47 @@
       <% end %>
     <% end %>
   </div>
+
+  <!-- Post Interactions: Comments & Likes -->
+  <div class="mt-3">
+    <%= render "likes/button", post: post %>
+    <%= render "comments/form", post: post %>
+  </div>
+
+  <!-- Like & Comment Count -->
+<div class="mt-2 text-sm text-gray-600">
+  <span><%= pluralize(post.likes.count, "Like") %></span>
+  •
+  <span><%= pluralize(post.comments.count, "Comment") %></span>
+</div>
+
+<!-- List of Users Who Liked the Post -->
+<% if post.likes.any? %>
+  <div class="text-xs text-gray-500 mt-1">
+    Liked by <%= post.likes.includes(:user).limit(3).map { |like| link_to like.user.username, adjusted_user_path(like.user), class: "font-semibold text-blue-600 hover:underline" }.join(", ").html_safe %>
+    <% if post.likes.count > 3 %>
+      and <%= post.likes.count - 3 %> others
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Comments Section -->
+<% if post.comments.any? %>
+  <div class="mt-3 space-y-2">
+    <% post.comments.includes(:user).each do |comment| %>
+      <!-- Timestamp -->
+      <span class="text-gray-500 text-sm"><%= post.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+      <div class="flex items-center space-x-3 border rounded-lg p-2 bg-gray-100">
+        <!-- Comment Header: Profile Picture & Author -->
+        <%= linked_post_profile_picture_for(post.user) %>
+        <p class="text-sm flex-1"><strong><%= link_to "@#{comment.user.username}", adjusted_user_path(comment.user), class: "text-blue-600 hover:underline" %></strong>: <%= comment.content %></p>
+        <% if comment.user == current_user %>
+          <%= button_to post_comment_path(post, comment), method: :delete, class: "p-1 rounded-md bg-gray-200 hover:bg-red-500 hover:text-white transition ml-3 flex-shrink-0" do %>
+            <span class="text-sm">❌</span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
 </div>

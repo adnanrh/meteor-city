@@ -1,7 +1,7 @@
 class Invite < ApplicationRecord
     belongs_to :inviter, class_name: "User"
   
-    before_create :generate_token, :set_expiry
+    before_validation :generate_token, :set_expiry
   
     validates :token, presence: true, uniqueness: true
     validates :expires_at, presence: true

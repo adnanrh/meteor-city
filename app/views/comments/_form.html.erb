@@ -1,0 +1,6 @@
+<%= form_with model: [post, Comment.new], local: true do |f| %>
+  <div class="flex items-center space-x-2 mt-2">
+    <%= f.text_field :content, placeholder: "Write a comment...", class: "w-full p-2 border rounded-lg" %>
+    <%= f.submit "Comment", class: "bg-blue-500 text-white px-4 py-2 rounded-lg" %>
+  </div>
+<% end %>

@@ -7,7 +7,14 @@ class CommentsController < ApplicationController
   
     def destroy
       comment = current_user.comments.find(params[:id])
-      comment.destroy
+
+      if comment
+        comment.destroy
+        flash[:notice] = "Comment deleted."
+      else
+        flash[:alert] = "You can only delete your own comments."
+      end
+
       redirect_to root_path, notice: "Comment removed."
     end
   end

@@ -10,8 +10,11 @@ class InvitesController < ApplicationController
 
   def create
     current_user.invite&.destroy
-    current_user.create_invite!
-    
-    render json: { invite_link: invite_url(invite.token) }
+    @invite = current_user.create_invite!
+
+    respond_to do |format|
+      format.json { render json: { invite_url: view_invite_url(@invite.token) }, status: :created }
+      format.html { redirect_to profile_path, notice: "Invite link created!" }
+    end
   end
 end

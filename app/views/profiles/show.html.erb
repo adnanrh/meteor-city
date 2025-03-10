@@ -4,4 +4,33 @@
 <p>Display Name: <%= current_user.display_name %></p>
 <p>Bio: <%= current_user.bio %></p>
 
-<%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary" %>
+<div class="mt-4">
+    <%= link_to "Edit Profile", edit_profile_path, class: form_button_classes %>
+</div>
+
+<!-- Generate Invite Button -->
+<div class="mt-4">
+  <button id="generate-invite-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+    Generate Invite Link
+  </button>
+</div>
+
+<!-- Display Invite Link via ajax -->
+<div id="invite-link" class="mt-2 text-blue-600"></div>
+
+<script>
+  document.getElementById("generate-invite-btn").addEventListener("click", async function() {
+    const response = await fetch("<%= invite_path %>", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json", "X-CSRF-Token": "<%= form_authenticity_token %>" }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      document.getElementById("invite-link").innerHTML = 
+        `<a href="${data.invite_url}" target="_blank" class="underline">Your Invite Link</a>`;
+    } else {
+      alert("Failed to generate invite link.");
+    }
+  });
+</script>

@@ -1,0 +1,7 @@
+<%= button_to post_like_path(post), method: :post, class: "text-gray-500 hover:text-red-500 text-sm px-2 py-1" do %>
+  <% if post.likes.exists?(user: current_user) %>
+    ❤️ Unlike
+  <% else %>
+    🤍 Like
+  <% end %>
+<% end %>

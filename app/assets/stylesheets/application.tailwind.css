@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button {
+    border: 1px solid #1a202c; /* border-gray-900 */
+    background-color: #4299e1; /* bg-blue-500 */
+    color: #ffffff; /* text-white */
+    font-weight: 600; /* font-semibold */
+    padding-left: 1rem; /* px-4 */
+    padding-right: 1rem; /* px-4 */
+    padding-top: 0.5rem; /* py-2 */
+    padding-bottom: 0.5rem; /* py-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+  }
+  

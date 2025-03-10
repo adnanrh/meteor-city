@@ -67,6 +67,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
     t.index ["user1_id", "user2_id"], name: "index_friendships_on_user1_id_and_user2_id", unique: true
   end
 
+  create_table "invites", force: :cascade do |t|
+    t.integer "inviter_id", null: false
+    t.string "token", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inviter_id"], name: "index_invites_on_inviter_id"
+    t.index ["token"], name: "index_invites_on_token", unique: true
+  end
+
   create_table "likes", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "post_id", null: false
@@ -115,6 +125,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
   add_foreign_key "friendship_requests", "users", column: "requester_id"
   add_foreign_key "friendships", "users", column: "user1_id"
   add_foreign_key "friendships", "users", column: "user2_id"
+  add_foreign_key "invites", "users", column: "inviter_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
   add_foreign_key "posts", "users"

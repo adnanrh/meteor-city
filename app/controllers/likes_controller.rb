@@ -1,7 +1,14 @@
 class LikesController < ApplicationController
     def create
       post = Post.find(params[:post_id])
-      post.likes.find_or_create_by!(user: current_user)
+      like = post.likes.find_by(user: current_user)
+
+      if like
+        like.destroy # Unlike if already liked
+      else
+        post.likes.create!(user: current_user) # Like if not already liked
+      end
+
       redirect_to root_path, notice: "Post liked!"
     end
   
