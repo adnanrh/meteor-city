@@ -1,12 +1,31 @@
-<h1 class="text-2xl font-bold">Your Friends</h1>
+<h1 class="text-2xl font-bold mb-4">Your Friends</h1>
+
+<%# Search field! :D %>
+<%= form_with url: friends_path, method: :get, local: true, class: "mb-4 flex items-center space-x-2" do %>
+  <%= text_field_tag :query, params[:query], placeholder: "Search friends...", class: "border border-gray-300 rounded px-3 py-1 text-sm w-full md:w-64" %>
+  <%= submit_tag "🔍", class: "px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm" %>
+<% end %>
+
+<% if params[:query].present? %>
+  <div>
+    <%= link_to "✖ Clear search", friends_path, class: "text-sm text-red-500 hover:underline" %>
+  </div>
+<% end %>
+
 <% if @friends.any? %>
   <ul>
     <% @friends.each do |friend| %>
-      <%= profile_picture_for(friend) %>
-      <li><%= link_to friend.username, friend_path(friend) %></li>
-      <li><%= friend.display_name %></li>
+      <li class="mb-4 flex items-center space-x-4">
+        <%= linked_profile_picture_for(friend) %>
+        <div>
+          <div><%= link_to friend.username, friend_path(friend), class: "font-semibold text-blue-600 hover:underline" %></div>
+          <div class="text-gray-600"><%= friend.display_name %></div>
+        </div>
+      </li>
     <% end %>
   </ul>
+<% elsif params[:query].present? %>
+  <p>No friends found.</p>
 <% else %>
-  <p>You haven't connected with anyone yet.</p>
+  <p>You have no friends yet. Start connecting with others!</p>
 <% end %>

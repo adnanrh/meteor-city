@@ -1,0 +1,6 @@
+<% unless current_user == friend %>
+  <div class="mt-4">
+    <%= link_to "🕊️ Add to Group", groups_path,
+      class: "inline-block text-base px-4 py-2 rounded-md border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition font-medium" %>
+  </div>
+<% end %>

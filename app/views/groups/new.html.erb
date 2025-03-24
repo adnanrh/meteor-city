@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold">➕ Create a New Group</h1>
+
+<%= form_with(model: @group, url: groups_path, method: :post) do |form| %>
+  <!-- Group Name -->
+  <div class="mb-4">
+    <%= form.label :name, "Group Name" %>
+    <%= form.text_field :name, required: true, class: "w-full border rounded p-2" %>
+  </div>
+
+  <!-- Add Members (Friends Selection) -->
+  <h2 class="text-xl font-bold mt-6">👥 Add Members</h2>
+  <div class="mb-4">
+    <%= form.label :friend_ids, "Select Friends to Add" %>
+    <%= form.collection_select :friend_ids, current_user.friends, :id, :display_name, { include_blank: false }, { multiple: true, class: "w-full border rounded p-2" } %>
+  </div>
+
+  <%= form.submit "Create Group", class: "bg-blue-500 text-white px-4 py-2 rounded" %>
+<% end %>
+
+<%= link_to "⬅ Back to Groups", groups_path, class: "text-blue-500 mt-4 block" %>

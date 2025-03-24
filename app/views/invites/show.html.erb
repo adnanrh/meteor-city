@@ -1,9 +1,13 @@
-<h1 class="text-2xl font-bold">Invitation</h1>
-# TODO: show user profile picture and/or display name
+<h1 class="text-2xl font-bold">You've been invited!</h1>
 <p>You have been invited to connect with <strong><%= @invite.inviter.username %></strong>.</p>
 
-<%= form_with url: friendships_path, method: :post do |form| %>
-  <%= hidden_field_tag :invite_token, @invite.token %>
+<%= profile_picture_for(@invite.inviter) %>
+<h1 class="text-2xl font-bold">@<%= @invite.inviter.username %></h1>
+<h2 class="text-2xl font-bold"><%= @invite.inviter.display_name %></h2>
 
-  <%= form.submit "Accept Invitation", class: "btn btn-primary" %>
+<%= form_with url: friendships_path, method: :post, local: true do |f| %>
+  <%= hidden_field_tag :invite_token, @invite.token %>
+  <%= f.submit "Accept Invitation", class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition" %>
 <% end %>
+
+<a href="<%= root_path %>" class="block mt-2 text-red-500 hover:text-gray-700">Cancel</a>

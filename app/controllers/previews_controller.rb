@@ -7,3 +7,4 @@ class PreviewsController < ApplicationController
       end
     end
   end
+  

@@ -9,20 +9,26 @@ class User < ApplicationRecord
   # class_name and foreign_key for both associations. With canonical ordering, we
   # are ensuring that only 1 row exists for any given pair of friends :), which
   # improves data hygiene, query consistency, and efficient indexing!
-  has_many :friendships_as_user1, class_name: "Friendship", foreign_key: "user1_id", dependent: :destroy
-  has_many :friendships_as_user2, class_name: "Friendship", foreign_key: "user2_id", dependent: :destroy
-
   has_many :friends, ->(user) {
     unscope(:where).where(
-      "friendships.user1_id = :id OR friendships.user2_id = :id",
-      id: user.id
-    )
-  }, through: :friendships_as_user1, source: :user2
+      "users.id IN (
+        SELECT friendships.user1_id FROM friendships WHERE friendships.user2_id = :id
+        UNION
+        SELECT friendships.user2_id FROM friendships WHERE friendships.user1_id = :id
+      )",
+    id: user.id
+  )
+}, class_name: "User"
 
   # --- Posts & Interactions ---
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
+
+  # --- Groups ---
+  has_many :groups, foreign_key: :creator_id, dependent: :destroy
+  has_many :group_memberships, foreign_key: :friend_id, dependent: :destroy
+  has_many :member_groups, through: :group_memberships, source: :group
 
   # --- Invite Management ---
   has_one :invite, foreign_key: :inviter_id, dependent: :destroy
@@ -58,5 +64,17 @@ class User < ApplicationRecord
     my_friend_ids = friends.pluck(:id)
     other_friend_ids = other_user.friends.pluck(:id)
     User.where(id: my_friend_ids & other_friend_ids)
+  end
+
+  # Returns only the posts from this user that the given user is allowed to see
+  def posts_visible_for_user(viewing_user)
+    return Post.none unless friends_with?(viewing_user) || self == viewing_user
+
+    posts.where(
+      "visibility = :global OR (visibility = :group_only AND group_id IN (:user_groups))",
+      global: Post.visibilities[:global],
+      group_only: Post.visibilities[:group_only],
+      user_groups: viewing_user.member_groups.pluck(:id)
+    )
   end
 end

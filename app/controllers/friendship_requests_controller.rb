@@ -2,7 +2,7 @@ class FriendshipRequestsController < ApplicationController
     def create
       requested = User.find(params[:requested_id])
       current_user.sent_requests.create!(requested: requested)
-      redirect_to previews_path(requested), notice: "Friend request sent!"
+      redirect_to preview_path(requested), notice: "Friend request sent!"
     end
   
     def destroy

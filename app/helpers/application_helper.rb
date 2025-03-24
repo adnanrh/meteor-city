@@ -1,8 +1,19 @@
 module ApplicationHelper
 
   # returns the path to the specified user
+  # should be either the:
+  # 1. profile path if current user
+  # 2. friend path if another user that's a friend of the current user
+  # 3. preview path if another user that's not a friend of the current user (but has mutual friends)
+  # 4. profile path otherwise
   def adjusted_user_path(user)
-    user == current_user ? profile_path : friend_path(user)
+    return profile_path if user == current_user
+
+    return friend_path(user) if current_user.friends_with?(user)
+
+    return preview_path(user) if current_user.mutual_friends_with(user).any?
+    
+    return profile_path
   end
 
   # return the profile picture sized for the profile page
@@ -12,6 +23,13 @@ module ApplicationHelper
       image_tag url_for(user.profile_picture), alt: "#{user.username}'s Profile Picture", class: classes
     else
       content_tag :p, "No profile picture uploaded."
+    end
+  end
+
+  # return the profile picture sized for the profile page that also links to the user's profile
+  def linked_profile_picture_for(user)
+    link_to adjusted_user_path(user) do
+      profile_picture_for(user)
     end
   end
 
@@ -42,6 +60,32 @@ module ApplicationHelper
 
   def form_button_classes
     "bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg border border-gray-900 shadow-md hover:bg-blue-600 transition mt-4 mb-2"
+  end
+
+  def no_posts_message_for(path)
+    case path
+    when /\/home/
+      "No posts to show yet. Connect with friends to see their posts."
+    when /\/profile/
+      "You haven't posted anything yet."
+    when /\/friends\/\d+/
+      "No posts from this friend yet."
+    else
+      "No posts found."
+    end
+  end
+
+  def end_of_posts_message_for(path)
+    case path
+    when /\/home/
+      "You have reached the end of your community's posts."
+    when /\/profile/
+      "You've reached the end of your posts."
+    when /\/friends\/\d+/
+      "You’ve reached the end of this friend's posts."
+    else
+      "You’ve reached the end of the posts."
+    end
   end
 end
   

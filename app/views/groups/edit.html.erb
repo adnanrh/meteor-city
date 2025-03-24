@@ -1,0 +1,36 @@
+<h1 class="text-2xl font-bold">✏️ Edit Group</h1>
+
+<!-- Rename Group -->
+<%= form_with(model: @group, url: group_path(@group), method: :patch) do |form| %>
+  <div class="mb-4">
+    <%= form.label :name, "Group Name" %>
+    <%= form.text_field :name, required: true, class: "w-full border rounded p-2" %>
+  </div>
+
+  <%= form.submit "Save", class: "bg-blue-500 text-white px-4 py-2 rounded" %>
+<% end %>
+
+<!-- Add Member Form -->
+<h2 class="text-xl font-bold mt-6">➕ Add Members</h2>
+<%= form_with url: group_memberships_path, method: :post, local: true do |f| %>
+  <%= hidden_field_tag :group_id, @group.id %>
+  <div class="mb-4">
+    <%= f.label :friend_id, "Select a Friend" %>
+    <%= f.collection_select :friend_id, current_user.friends - @group.members, :id, :display_name, { include_blank: "Select a friend" }, class: "w-full border rounded p-2" %>
+  </div>
+
+  <%= f.submit "Add to Group", class: "bg-green-500 text-white px-4 py-2 rounded" %>
+<% end %>
+
+<!-- List Members with Remove Button -->
+<h2 class="text-xl font-bold mt-6">📋 Current Members</h2>
+<ul>
+  <% @group.members.each do |member| %>
+    <li class="border p-2 rounded mt-2 flex justify-between">
+      <%= member.display_name %>
+      <%= button_to "❌ Remove", group_group_membership_path(@group, member), method: :delete, class: "text-red-500" %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to "⬅ Back to Group", group_path(@group), class: "text-blue-500 mt-4 block" %>

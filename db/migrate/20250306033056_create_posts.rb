@@ -5,6 +5,8 @@ class CreatePosts < ActiveRecord::Migration[7.2]
       t.string :post_type, null: false
       t.text :content
       t.string :caption  # Add caption field for image posts
+      t.integer :visibility, default: 0, null: false # 0 = global, 1 = group_only
+      t.references :group, foreign_key: true, null: true # Nullable, only if it's a group post
       t.datetime :expires_at
 
       t.timestamps

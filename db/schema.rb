@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_19_155316) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -67,6 +67,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
     t.index ["user1_id", "user2_id"], name: "index_friendships_on_user1_id_and_user2_id", unique: true
   end
 
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "friend_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_group_memberships_on_friend_id"
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_groups_on_creator_id"
+  end
+
   create_table "invites", force: :cascade do |t|
     t.integer "inviter_id", null: false
     t.string "token", null: false
@@ -91,9 +108,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
     t.string "post_type", null: false
     t.text "content"
     t.string "caption"
+    t.integer "visibility", default: 0, null: false
+    t.integer "group_id"
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_posts_on_group_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -125,8 +145,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_220546) do
   add_foreign_key "friendship_requests", "users", column: "requester_id"
   add_foreign_key "friendships", "users", column: "user1_id"
   add_foreign_key "friendships", "users", column: "user2_id"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users", column: "friend_id"
+  add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "invites", "users", column: "inviter_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
+  add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
 end

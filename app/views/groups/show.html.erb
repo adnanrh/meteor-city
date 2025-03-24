@@ -1,0 +1,14 @@
+<h1 class="text-2xl font-bold">👥 Group: <%= @group.name %></h1>
+
+<!-- Members List -->
+<h2 class="text-xl font-bold mt-6">📋 Members</h2>
+<ul>
+  <% @group.members.each do |member| %>
+    <li class="border p-2 rounded mt-2"><%= member.display_name %></li>
+  <% end %>
+</ul>
+
+<!-- Edit Button -->
+<%= link_to "✏️ Edit Group", edit_group_path(@group), class: "text-blue-500 mt-4 block" %>
+
+<%= link_to "⬅ Back to Groups", groups_path, class: "text-blue-500 mt-4 block" %>

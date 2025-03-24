@@ -29,5 +29,40 @@
     <%= form.text_field :caption, class: "w-full border rounded p-2" %>
   </div>
 
+  <!-- Visibility Selector -->
+  <div class="mb-4">
+    <%= form.label :visibility, "Who can see this post?" %>
+    <%= form.select :visibility, Post.visibilities.keys.map { |v| [v.titleize, v] }, { selected: "global" }, { id: "post_visibility", class: "w-full border rounded p-2" } %>
+  </div>
+
+  <!-- Group Selection (Only if user selects "Group" visibility) -->
+  <div id="group-selection" style="display: none;">
+    <%= form.label :group_id, "Post to Group" %>
+    <%= form.collection_select :group_id, current_user.groups, :id, :name, { include_blank: "None" }, class: "w-full border rounded p-2" %>
+
+    <!-- Link to manage groups -->
+    <p class="text-sm mt-2">
+      Need a new group? <%= link_to "Create a Group", groups_path, class: "text-blue-500" %>
+    </p>
+  </div>
+
   <%= form.submit "Publish", class: form_button_classes %>
 <% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const visibilitySelect = document.querySelector("#post_visibility");
+    const groupSelectionDiv = document.querySelector("#group-selection");
+
+    function toggleGroupSelection() {
+      if (visibilitySelect.value === "group_only") {
+        groupSelectionDiv.style.display = "block";
+      } else {
+        groupSelectionDiv.style.display = "none";
+      }
+    }
+
+    visibilitySelect.addEventListener("change", toggleGroupSelection);
+    toggleGroupSelection(); // Run on page load
+  });
+</script>

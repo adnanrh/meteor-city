@@ -1,0 +1,18 @@
+<% if mutual_friends.any? %>
+  <div class="mt-4 mb-4">
+    <p class="font-semibold">Mutual Friends:</p>
+
+    <div class="flex items-center space-x-3 mt-2">
+      <% mutual_friends.each do |mutual_friend| %>
+        <div class="flex items-center space-x-2">
+          <%= link_to friend_path(mutual_friend), class: "flex items-center space-x-1" do %>
+            <%= linked_post_profile_picture_for(mutual_friend) %>
+            <span class="text-sm"><%= mutual_friend.display_name %></span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <p class="mt-4 mb-4">No mutual friends.</p>
+<% end %>

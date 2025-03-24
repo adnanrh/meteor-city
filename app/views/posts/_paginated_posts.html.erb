@@ -1,0 +1,29 @@
+<%# Required locals: posts, path %>
+
+<%# Load Newer Posts (top) %>
+<% if posts.prev_page %>
+  <div class="mb-4 text-center">
+    <%= link_to "⬆️ Load newer posts", path.call(page: posts.prev_page), class: "text-blue-600 hover:underline text-sm" %>
+  </div>
+<% end %>
+
+<% if posts.any? %>
+  <% posts.each do |post| %>
+    <%= render "posts/preview", post: post %>
+  <% end %>
+<% else %>
+  <p class="text-gray-500"><%= no_posts_message_for(request.path) %></p>
+<% end %>
+
+<%# Load Older Posts (bottom) %>
+<% if posts.next_page %>
+  <div class="mt-6 text-center space-y-2">
+    <%= link_to "⬇️ Load older posts", path.call(page: posts.next_page), class: "text-blue-600 hover:underline text-sm block" %>
+    <%= link_to "🔝 Scroll to top", "#", class: "text-gray-500 hover:text-blue-600 text-xs block" %>
+  </div>
+<% else %>
+  <div class="mt-6 text-center space-y-2">
+    <p class="text-gray-500"><%= end_of_posts_message_for(request.path) %></p>
+    <%= link_to "🔝 Scroll to top", "#", class: "text-gray-500 hover:text-blue-600 text-xs block" %>
+  </div>
+<% end %>

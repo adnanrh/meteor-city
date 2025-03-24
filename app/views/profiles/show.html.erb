@@ -18,6 +18,10 @@
 <!-- Display Invite Link via ajax -->
 <div id="invite-link" class="mt-2 text-blue-600"></div>
 
+<!-- Display My Posts -->
+<h2 class="text-xl font-bold mt-6 mb-2">My Posts</h2>
+<%= render "posts/paginated_posts", posts: @posts, path: ->(params) { profile_path(params) } %>
+
 <script>
   document.getElementById("generate-invite-btn").addEventListener("click", async function() {
     const response = await fetch("<%= invite_path %>", {

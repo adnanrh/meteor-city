@@ -1,14 +1,13 @@
 <%= profile_picture_for(@friend) %>
-<h1 class="text-2xl font-bold"><%= @friend.username %>'s Profile</h1>
-<h2 class="text-2xl font-bold"><%= @friend.display_name %>'s Profile</h2>
-<p>Bio: <%= @friend.bio %></p>
+<h1 class="text-2xl font-bold"><%= @friend.username %></h1>
+<h2 class="text-2xl font-bold"><%= @friend.display_name %></h2>
+<p><%= @friend.bio %></p>
 
-# Posts
-# TODO: pagination
-<% if @friend.posts.any? %>
-  <% @friend.posts.each do |post| %>
-    <%= render "posts/post", post: post %>
-  <% end %>
-<% else %>
-  <p>No posts to show yet.</p>
-<% end %>
+<%= render "friends/add_to_group_section", friend: @friend %>
+
+<!-- Mutual Friends -->
+<%= render "shared/mutual_friends", mutual_friends: current_user.mutual_friends_with(@friend) %>
+
+<!-- Posts -->
+<h2 class="text-xl font-bold mt-6 mb-2"><%= @friend.username %>'s Posts</h2>
+<%= render "posts/paginated_posts", posts: @posts, path: ->(params) { friend_path(@friend, params) } %>

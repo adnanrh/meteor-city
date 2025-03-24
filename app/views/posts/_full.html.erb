@@ -1,0 +1,54 @@
+<!-- Post header and content -->
+<%= render "posts/post", post: post %>
+
+<!-- Post Interactions: Comments & Likes -->
+  <div class="mt-3">
+    <%= render "likes/button", post: post %>
+    <%= render "comments/form", post: post %>
+  </div>
+
+  <!-- Like & Comment Count -->
+<div class="mt-2 text-sm text-gray-600">
+  <span><%= pluralize(post.likes.count, "Like") %></span>
+  •
+  <span><%= pluralize(post.comments.count, "Comment") %></span>
+</div>
+
+<!-- List of Users Who Liked the Post -->
+<% if post.likes.any? %>
+  <div class="text-xs text-gray-500 mt-1">
+    Liked by <%= post.likes.includes(:user).limit(3).map { |like| link_to like.user.username, adjusted_user_path(like.user), class: "font-semibold text-blue-600 hover:underline" }.join(", ").html_safe %>
+    <% if post.likes.count > 3 %>
+      and <%= post.likes.count - 3 %> others
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Comments Section -->
+<h2 class="mt-4 text-md font-semibold text-gray-700">Comments</h2>
+<% if post.comments.any? %>
+  <div class="mt-2 space-y-2">
+    <% post.comments.includes(:user).each do |comment| %>
+      <div class="flex items-start justify-between space-x-3 border rounded-lg p-2 bg-gray-100 text-sm">
+        <!-- Left: Profile picture + content -->
+        <div class="flex items-start space-x-2">
+          <%= linked_post_profile_picture_for(comment.user) %>
+          <div>
+            <p>
+              <strong><%= link_to "@#{comment.user.username}", adjusted_user_path(comment.user), class: "text-blue-600 hover:underline" %></strong>
+              <%= comment.content %>
+            </p>
+            <span class="text-gray-400 text-xs"><%= comment.created_at.strftime("%b %d, %I:%M %p") %></span>
+          </div>
+        </div>
+
+        <!-- Right: Delete button -->
+        <% if comment.user == current_user %>
+          <%= button_to post_comment_path(post, comment), method: :delete, class: "p-1 rounded-md bg-blue-200 hover:bg-red-500 hover:text-white transition flex-shrink-0" do %>
+            <span class="text-sm">❌</span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

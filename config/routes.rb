@@ -26,11 +26,18 @@ Rails.application.routes.draw do
   resources :friends, only: [:index, :show]
 
   # Posts (comments & likes nested inside posts)
-  resources :posts, only: [:create, :destroy] do
+  resources :posts, only: [:show, :create, :destroy] do
     resources :comments, only: [:create, :destroy]
     resource :like, only: [:create, :destroy]
   end
   get "publish", to: "posts#new", as: "new_post"
+
+  # Groups (for creating and managing friend groups)
+  resources :groups
+
+  # Group Memberships (adding/removing friends from groups)
+  # Note: This could be a nested resource under groups, but keeping it flat for simplicity
+  resources :group_memberships, only: [:create, :destroy]
 
   # Invite management (generating your invite link, viewing invites)
   resource :invite, only: [:create]

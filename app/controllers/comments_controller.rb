@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
     def create
       post = Post.find(params[:post_id])
       post.comments.create!(user: current_user, content: params[:comment][:content])
-      redirect_to root_path, notice: "Comment added!"
+      redirect_to post_path(post), notice: "Comment added!"
     end
   
     def destroy
@@ -15,6 +15,6 @@ class CommentsController < ApplicationController
         flash[:alert] = "You can only delete your own comments."
       end
 
-      redirect_to root_path, notice: "Comment removed."
+      redirect_to post_path(comment.post), notice: "Comment removed."
     end
   end
