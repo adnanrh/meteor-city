@@ -70,6 +70,8 @@ module ApplicationHelper
       "You haven't posted anything yet."
     when /\/friends\/\d+/
       "No posts from this friend yet."
+    when /\/archives/
+      "You don't have any archived posts yet."
     else
       "No posts found."
     end
@@ -83,6 +85,8 @@ module ApplicationHelper
       "You've reached the end of your posts."
     when /\/friends\/\d+/
       "You’ve reached the end of this friend's posts."
+    when /\/archives/
+      "You've reached the end of your archived posts."
     else
       "You’ve reached the end of the posts."
     end

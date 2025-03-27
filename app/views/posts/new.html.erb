@@ -46,6 +46,20 @@
     </p>
   </div>
 
+  <!-- Expiry Selector -->
+  <div class="mb-4">
+    <%= form.label :expires_at, "Set Expiry (optional)" %>
+    <%= form.select :expires_at, [
+          ["Never", ""],
+          ["1 Day", 1.day.from_now.iso8601],
+          ["1 Week", 1.week.from_now.iso8601],
+          ["1 Month", 1.month.from_now.iso8601]
+        ],
+        { include_blank: false },
+        class: "w-full border rounded p-2"
+    %>
+  </div>
+
   <%= form.submit "Publish", class: form_button_classes %>
 <% end %>
 

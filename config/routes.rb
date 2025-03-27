@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   end
   get "publish", to: "posts#new", as: "new_post"
 
+  # Archived Posts
+  resources :archives, only: [:index, :show]
+
   # Groups (for creating and managing friend groups)
   resources :groups
 

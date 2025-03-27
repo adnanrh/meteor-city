@@ -20,9 +20,11 @@ class Post < ApplicationRecord
 
     before_validation :clear_irrelevant_fields
 
-    before_create :set_default_expiry
+    # Default scope: show only active posts (not expired)
+    default_scope { where(expired: false) }
 
-    scope :active, -> { where("expires_at IS NULL OR expires_at > ?", Time.current) }
+    # Scope to get expired (archived) posts
+    scope :archived, -> { unscope(where: :expired).where(expired: true) }
 
     # get all posts that are visible to a given user
     scope :visible_to, ->(user) {
@@ -55,10 +57,6 @@ class Post < ApplicationRecord
       if post_type == "image" && !image.attached?
         errors.add(:image, "must be attached for image posts")
       end
-    end
-
-    def set_default_expiry
-      self.expires_at ||= 30.days.from_now # Example — tweak this if you want a different default
     end
 
     def clear_irrelevant_fields

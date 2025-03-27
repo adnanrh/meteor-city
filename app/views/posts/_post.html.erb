@@ -17,9 +17,16 @@
   <span><%= post.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
 </div>
 
+<!-- Expiry Indicator -->
+<% if post.expires_at.present? && !post.expired? %>
+  <div class="bg-gray-100 text-xs text-gray-600 px-2 py-1 rounded inline-block mt-1">
+    🕒 Expires <%= time_ago_in_words(post.expires_at) %> from now
+  </div>
+<% end %>
+
 <!-- Group Visibility Indicator (if applicable) -->
 <% if post.visibility == "group_only" && post.group.present? %>
-  <p class="text-sm text-gray-600">👁️ Visible only to <strong>@<%= post.user.username %></strong>'s group <strong><%= post.group.name %></strong></p>
+  <p class="text-sm text-gray-600 mt-1">👁️ Visible only to <strong>@<%= post.user.username %></strong>'s group <strong><%= post.group.name %></strong></p>
 <% end %>
 
 <!-- Post Content -->
